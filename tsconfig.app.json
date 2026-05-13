@@ -8,13 +8,10 @@
     "moduleResolution": "bundler",
     "jsx": "react-jsx",
 
-    /* Алиасы */
-    "baseUrl": ".", 
     "paths": {
       "@/*": ["./src/*"]
     },
 
-    /* Остальные настройки */
     "strict": true,
     "noImplicitAny": true,
     "skipLibCheck": true,
