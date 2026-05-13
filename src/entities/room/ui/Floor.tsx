@@ -1,20 +1,26 @@
 import { useMemo } from 'react';
+import { useRoomStore } from '../model/store';
 import { calculateHerringbone } from '../lib/calculateHerringbone';
 
 export const Floor = () => {
-  const roomConfig = { width: 5, depth: 5 };
-  const plankConfig = { width: 0.1, length: 0.6, thickness: 0.01 };
+  const { width, length } = useRoomStore((s) => s.dimensions);
+
+  const plank = {
+    width: 0.1,
+    length: 0.6,
+    thickness: 0.01,
+  };
 
   const planks = useMemo(
-    () => calculateHerringbone(roomConfig, plankConfig),
-    [roomConfig, plankConfig],
+    () => calculateHerringbone({ width, depth: length }, plank),
+    [width, length],
   );
 
   return (
     <group>
-      {planks.map((plank) => (
-        <mesh key={plank.id} position={plank.position} rotation={plank.rotation}>
-          <boxGeometry args={[plankConfig.length, plankConfig.thickness, plankConfig.width]} />
+      {planks.map((p) => (
+        <mesh key={p.id} position={p.position}>
+          <boxGeometry args={p.size} />
           <meshStandardMaterial color="#8b4513" />
         </mesh>
       ))}

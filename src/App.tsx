@@ -8,7 +8,7 @@ function App() {
   return (
     <div style={{ width: '100vw', height: '100vh', display: 'flex' }}>
       <div style={{ flex: 1, background: '#111' }}>
-        <Canvas camera={{ position: [10, 10, 10], fov: 45 }}>
+        <Canvas camera={{ position: [10, 10, 10], fov: 45 }} gl={{ localClippingEnabled: true }}>
           <Perf position="top-left" />
           <ambientLight intensity={0.5} />
           <directionalLight position={[10, 10, 5]} intensity={1} castShadow />
