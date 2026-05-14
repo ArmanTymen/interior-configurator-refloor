@@ -1,55 +1,83 @@
 export interface PlankConfig {
-  width: number;
-  length: number;
-  thickness: number;
+  readonly width: number;
+  readonly length: number;
+  readonly thickness: number;
 }
-
 export interface RoomConfig {
-  width: number;
-  depth: number;
+  readonly width: number;
+  readonly depth: number;
 }
 
 export interface TransformData {
-  id: string;
-  position: [number, number, number];
-  rotation: [number, number, number];
-  size: [number, number, number];
+  readonly id: string;
+  readonly position: [number, number, number];
+  readonly rotation: [number, number, number];
+  readonly size: [number, number, number];
 }
 
-const GAP = 0.002;
+const GAP = 0.008;
 const FLOOR_OFFSET = 0.0001;
 
 export const calculateHerringbone = (room: RoomConfig, plank: PlankConfig): TransformData[] => {
   const planks: TransformData[] = [];
+  const angle = Math.PI / 4;
 
-  const cols = Math.ceil(room.width / plank.length);
-  const rows = Math.ceil(room.depth / plank.width);
+  const stepX = plank.length * Math.SQRT2;
+  const stepZ = plank.width * Math.SQRT2;
 
-  const startX = -room.width / 2;
-  const startZ = -room.depth / 2;
+  const halfRoomW = room.width / 2;
+  const halfRoomD = room.depth / 2;
 
-  for (let row = 0; row < rows; row++) {
-    for (let col = 0; col < cols; col++) {
-      const currentX = startX + col * plank.length;
-      const currentZ = startZ + row * plank.width;
+  const startI = Math.floor(-halfRoomW / stepX) - 1;
+  const endI = Math.ceil(halfRoomW / stepX) + 1;
+  const startJ = Math.floor(-halfRoomD / stepZ) - 1;
+  const endJ = Math.ceil(halfRoomD / stepZ) + 1;
 
-      const actualLength = Math.min(plank.length, room.width / 2 - currentX);
-      const actualWidth = Math.min(plank.width, room.depth / 2 - currentZ);
+  const radius = Math.sqrt(Math.pow(plank.length / 2, 2) + Math.pow(plank.width / 2, 2));
 
-      if (actualLength <= 0 || actualWidth <= 0) continue;
+  for (let i = startI; i <= endI; i++) {
+    for (let j = startJ; j <= endJ; j++) {
+      const baseX = i * stepX;
+      const baseZ = j * stepZ;
 
-      planks.push({
-        id: `plank-${row}-${col}`,
-        position: [
-          currentX + actualLength / 2,
-          plank.thickness / 2 + FLOOR_OFFSET,
-          currentZ + actualWidth / 2,
-        ],
-        rotation: [0, 0, 0],
-        size: [actualLength - GAP, plank.thickness, actualWidth - GAP],
-      });
+      addPlank(planks, plank, room, radius, baseX, baseZ, -angle, `a-${i}-${j}`);
+      addPlank(
+        planks,
+        plank,
+        room,
+        radius,
+        baseX + stepX / 2,
+        baseZ + stepZ / 2,
+        +angle,
+        `b-${i}-${j}`,
+      );
     }
   }
-
   return planks;
 };
+
+function addPlank(
+  planks: TransformData[],
+  plank: PlankConfig,
+  room: RoomConfig,
+  radius: number,
+  cx: number,
+  cz: number,
+  angle: number,
+  id: string,
+): void {
+  if (
+    cx > room.width / 2 + radius ||
+    cx < -room.width / 2 - radius ||
+    cz > room.depth / 2 + radius ||
+    cz < -room.depth / 2 - radius
+  ) {
+    return;
+  }
+  planks.push({
+    id,
+    position: [cx, plank.thickness / 2 + FLOOR_OFFSET, cz],
+    rotation: [0, angle, 0],
+    size: [plank.length - GAP, plank.thickness, plank.width - GAP],
+  });
+}

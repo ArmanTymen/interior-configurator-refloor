@@ -1,73 +1,100 @@
-# React + TypeScript + Vite
+# Refloor
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Интерактивный 3D-конфигуратор напольных покрытий на React Three Fiber.
 
-Currently, two official plugins are available:
+## Возможности
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- динамическая генерация комнаты
+- procedural-генерация раскладки пола
+- раскладка "ёлочка"
+- GPU instancing
+- реактивное изменение размеров комнаты
+- strict TypeScript архитектура
 
-## React Compiler
+## Технологии
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- React
+- TypeScript
+- React Three Fiber
+- Three.js
+- Zustand
+- Vite
 
-## Expanding the ESLint configuration
+## Архитектура
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### Генерация геометрии
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+Раскладка пола генерируется процедурно на основе размеров комнаты и параметров плашек.
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+Алгоритм рассчитывает:
+- позицию
+- rotation
+- размеры
+- offsets
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+без хардкода координат.
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### Оптимизация рендера
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+Для рендера большого количества плашек используется instancing через `@react-three/drei/Instances`.
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+Это позволяет:
+- переиспользовать одну geometry
+- уменьшить количество draw calls
+- снизить нагрузку на CPU
+
+### Структура проекта
+
+Проект организован по принципам Feature-Sliced Design (FSD).
+
+Основные части приложения разделены на:
+- entities
+- features
+- widgets
+- shared
+
+что упрощает масштабирование и поддержку проекта.
+
+### State management
+
+Для хранения параметров комнаты используется Zustand.
+
+3D-сцена подписывается только на необходимые части состояния, что уменьшает лишние React rerender внутри Canvas.
+
+## Этапы реализации
+
+### Stage 0
+- настройка проекта
+- ESLint / Prettier
+- strict TypeScript
+- Git workflow
+- Husky
+
+### Code Quality
+
+Проект использует:
+
+- ESLint
+- Prettier
+- Husky
+- lint-staged
+
+для автоматической проверки качества кода перед commit.
+
+### Stage 1
+- генерация комнаты
+- динамические стены
+- OrbitControls
+- реактивные размеры
+
+### Stage 2
+- procedural floor layout
+- herringbone layout
+- instanced rendering
+- clipping planes
+
+## Запуск проекта
+
+```bash
+npm install
+npm run dev
