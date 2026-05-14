@@ -1,0 +1,28 @@
+export interface PlankConfig {
+  readonly width: number;
+  readonly length: number;
+  readonly thickness: number;
+}
+export interface RoomConfig {
+  readonly width: number;
+  readonly depth: number;
+}
+
+export interface TransformData {
+  readonly id: string;
+  readonly position: [number, number, number];
+  readonly rotation: [number, number, number];
+  readonly size: [number, number, number];
+}
+
+export interface RoomDimensions {
+  length: number;
+  width: number;
+  height: number;
+}
+
+export interface SkirtingConfig {
+  readonly height: number;
+  readonly thickness: number;
+  readonly color: string;
+}
