@@ -8,7 +8,7 @@ export const Room = () => {
     <group>
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0, 0]}>
         <planeGeometry args={[width, length]} />
-        <meshStandardMaterial color="#808080" side={DoubleSide} />
+        <meshStandardMaterial color="#171717" side={DoubleSide} />
       </mesh>
 
       <mesh position={[0, height / 2, -length / 2]}>

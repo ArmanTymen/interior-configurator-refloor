@@ -15,7 +15,7 @@ export const useRoomStore = create<RoomState>((set) => ({
   dimensions: {
     length: 5,
     width: 4,
-    height: 2.8,
+    height: 1,
   },
   setDimensions: (newDimensions) =>
     set((state) => ({
