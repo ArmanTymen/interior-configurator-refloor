@@ -16,9 +16,9 @@ export interface TransformData {
 }
 
 export interface RoomDimensions {
-  length: number;
-  width: number;
-  height: number;
+  readonly length: number;
+  readonly width: number;
+  readonly height: number;
 }
 
 export interface SkirtingConfig {

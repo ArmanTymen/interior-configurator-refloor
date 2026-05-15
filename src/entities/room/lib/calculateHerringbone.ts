@@ -33,7 +33,7 @@ export const calculateHerringbone = (room: RoomConfig, plank: PlankConfig): Tran
         radius,
         baseX + stepX / 2,
         baseZ + stepZ / 2,
-        +angle,
+        angle,
         `b-${i}-${j}`,
       );
     }

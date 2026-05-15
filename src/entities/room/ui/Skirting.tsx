@@ -22,12 +22,12 @@ function Skirting() {
 
   return (
     <group>
-      <mesh position={[0, height / 2, -length / 2 + thickness / 2 + EPS]}>
+      <mesh position={[0, height / 2, -length / 2 + thickness / 2 + EPS]} castShadow receiveShadow>
         <boxGeometry args={[width, height, thickness]} />
         <meshStandardMaterial color={color} />
       </mesh>
 
-      <mesh position={[0, height / 2, length / 2 - thickness / 2 - EPS]}>
+      <mesh position={[0, height / 2, length / 2 - thickness / 2 - EPS]} castShadow receiveShadow>
         <boxGeometry args={[width, height, thickness]} />
         <meshStandardMaterial color={color} />
       </mesh>
@@ -35,6 +35,8 @@ function Skirting() {
       <mesh
         position={[-width / 2 + thickness / 2 + EPS, height / 2, 0]}
         rotation={[0, Math.PI / 2, 0]}
+        castShadow
+        receiveShadow
       >
         <boxGeometry args={[adjustedLength, height, thickness]} />
         <meshStandardMaterial color={color} />
@@ -43,6 +45,8 @@ function Skirting() {
       <mesh
         position={[width / 2 - thickness / 2 - EPS, height / 2, 0]}
         rotation={[0, Math.PI / 2, 0]}
+        castShadow
+        receiveShadow
       >
         <boxGeometry args={[adjustedLength, height, thickness]} />
         <meshStandardMaterial color={color} />
