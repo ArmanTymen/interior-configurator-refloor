@@ -1,35 +1,40 @@
 import { DoubleSide } from 'three';
 import { useRoomStore } from '../model/store';
+import Skirting from './Skirting';
 
 export const Room = () => {
   const { width, length, height } = useRoomStore((state) => state.dimensions);
 
+  const wallMaterialProps = {
+    color: '#f0ede6',
+    roughness: 0.9,
+    metalness: 0.0,
+    side: DoubleSide,
+  };
+
   return (
     <group>
-      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0, 0]}>
-        <planeGeometry args={[width, length]} />
-        <meshStandardMaterial color="#171717" side={DoubleSide} />
-      </mesh>
-
-      <mesh position={[0, height / 2, -length / 2]}>
+      <mesh position={[0, height / 2, -length / 2]} receiveShadow>
         <planeGeometry args={[width, height]} />
-        <meshStandardMaterial color="#e0e0e0" side={DoubleSide} />
+        <meshStandardMaterial {...wallMaterialProps} />
       </mesh>
 
-      <mesh position={[0, height / 2, length / 2]} rotation={[0, Math.PI, 0]}>
+      <mesh position={[0, height / 2, length / 2]} rotation={[0, Math.PI, 0]} receiveShadow>
         <planeGeometry args={[width, height]} />
-        <meshStandardMaterial color="#e0e0e0" side={DoubleSide} />
+        <meshStandardMaterial {...wallMaterialProps} />
       </mesh>
 
-      <mesh position={[-width / 2, height / 2, 0]} rotation={[0, Math.PI / 2, 0]}>
+      <mesh position={[-width / 2, height / 2, 0]} rotation={[0, Math.PI / 2, 0]} receiveShadow>
         <planeGeometry args={[length, height]} />
-        <meshStandardMaterial color="#d0d0d0" side={DoubleSide} />
+        <meshStandardMaterial {...wallMaterialProps} />
       </mesh>
 
-      <mesh position={[width / 2, height / 2, 0]} rotation={[0, -Math.PI / 2, 0]}>
+      <mesh position={[width / 2, height / 2, 0]} rotation={[0, -Math.PI / 2, 0]} receiveShadow>
         <planeGeometry args={[length, height]} />
-        <meshStandardMaterial color="#d0d0d0" side={DoubleSide} />
+        <meshStandardMaterial {...wallMaterialProps} />
       </mesh>
+
+      <Skirting />
     </group>
   );
 };

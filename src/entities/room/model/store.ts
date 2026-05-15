@@ -1,10 +1,5 @@
 import { create } from 'zustand';
-
-export interface RoomDimensions {
-  length: number;
-  width: number;
-  height: number;
-}
+import { RoomDimensions } from './types';
 
 interface RoomState {
   dimensions: RoomDimensions;
