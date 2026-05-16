@@ -1,6 +1,6 @@
 import { DoubleSide } from 'three';
 import { useRoomStore } from '../model/store';
-import Skirting from './Skirting';
+import { Skirting } from './Skirting';
 
 export const Room = () => {
   const { width, length, height } = useRoomStore((state) => state.dimensions);
