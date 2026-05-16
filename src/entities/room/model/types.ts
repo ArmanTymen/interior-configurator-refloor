@@ -32,4 +32,5 @@ export interface CalculationResult {
   readonly skirtingLength: number;
   readonly wallArea: number;
   readonly totalPlanks: number;
+  readonly paintLiters: number;
 }

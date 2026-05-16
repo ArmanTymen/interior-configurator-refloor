@@ -4,7 +4,7 @@ import { calculateRoomMetrics } from '@/entities/room/lib/calculateMetrics';
 import { DEFAULT_PLANK } from '@/entities/room/model/constants';
 import { type ChangeEvent, useMemo } from 'react';
 
-type DimensionKey = keyof ReturnType<typeof useRoomStore>['dimensions'];
+type DimensionKey = keyof ReturnType<typeof useRoomStore.getState>['dimensions'];
 
 export const ControlsPanel = () => {
   const dimensions = useRoomStore((state) => state.dimensions);
@@ -94,6 +94,11 @@ export const ControlsPanel = () => {
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
           <span>Площадь пола:</span>
           <strong>{metrics.floorArea} м²</strong>
+        </div>
+
+        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+          <span>Краска (в 2 слоя):</span>
+          <strong>{metrics.paintLiters} л</strong>
         </div>
 
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
