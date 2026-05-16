@@ -1,22 +1,12 @@
-import { useMemo } from 'react';
 import { useRoomStore } from '../model/store';
-import { SkirtingConfig } from '../model/types';
+import { DEFAULT_SKIRTING } from '../model/constants';
 
 const EPS = 0.001;
 
-function Skirting() {
+export const Skirting = () => {
   const { width, length } = useRoomStore((s) => s.dimensions);
 
-  const config: SkirtingConfig = useMemo(
-    () => ({
-      height: 0.1,
-      thickness: 0.015,
-      color: '#eeeeee',
-    }),
-    [],
-  );
-
-  const { height, thickness, color } = config;
+  const { height, thickness, color } = DEFAULT_SKIRTING;
 
   const adjustedLength = length - thickness * 2;
 
@@ -53,6 +43,4 @@ function Skirting() {
       </mesh>
     </group>
   );
-}
-
-export default Skirting;
+};

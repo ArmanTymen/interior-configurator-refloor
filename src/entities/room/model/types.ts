@@ -26,3 +26,11 @@ export interface SkirtingConfig {
   readonly thickness: number;
   readonly color: string;
 }
+
+export interface CalculationResult {
+  readonly floorArea: number;
+  readonly skirtingLength: number;
+  readonly wallArea: number;
+  readonly totalPlanks: number;
+  readonly paintLiters: number;
+}
