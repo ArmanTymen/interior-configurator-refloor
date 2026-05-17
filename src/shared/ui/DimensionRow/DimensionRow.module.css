@@ -1,0 +1,36 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.labelRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.inputWrapper {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.numberInput {
+  width: 60px;
+}
+
+.numberInputError {
+  border-color: red;
+}
+
+.rangeInput {
+  width: 100%;
+}
+
+.errorText {
+  color: red;
+  font-size: 12px;
+  text-align: right;
+  margin-top: -2px;
+}

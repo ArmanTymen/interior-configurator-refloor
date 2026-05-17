@@ -56,16 +56,6 @@ export const FloorMaterial = ({ clippingPlanes }: FloorMaterialProps) => {
       metalness={0.0}
       clippingPlanes={clippingPlanes}
       normalScale={new THREE.Vector2(0.35, 0.35)}
-      onBeforeCompile={(shader: THREE.WebGLProgramParametersWithUniforms) => {
-        shader.vertexShader = shader.vertexShader.replace(
-          '#include <uv_vertex>',
-          `
-        #include <uv_vertex>
-        #ifdef USE_UV
-        #endif
-        `,
-        );
-      }}
     />
   );
 };

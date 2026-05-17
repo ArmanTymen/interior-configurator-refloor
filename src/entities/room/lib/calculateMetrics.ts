@@ -1,10 +1,16 @@
 import { DEFAULT_PLANK } from '../model/constants';
-import { RoomDimensions, CalculationResult } from '../model/types';
+import { RoomDimensions, CalculationResult, FloorLayout } from '../model/types';
 
-const WASTE_COEFFICIENT = 1.15;
-const PAINT_CONSUMPTION_PER_SQM = 0.2;
+const WASTE_COEFFICIENTS: Record<FloorLayout, number> = {
+  straight: 1.07,
+  herringbone: 1.15,
+};
+const PAINT_CONSUMPTION_TWO_LAYERS_PER_SQM = 0.2;
 
-export const calculateRoomMetrics = (dimensions: RoomDimensions): CalculationResult => {
+export const calculateRoomMetrics = (
+  dimensions: RoomDimensions,
+  layout: FloorLayout,
+): CalculationResult => {
   const { length, width, height } = dimensions;
 
   const floorArea = length * width;
@@ -13,9 +19,10 @@ export const calculateRoomMetrics = (dimensions: RoomDimensions): CalculationRes
 
   const plankArea = DEFAULT_PLANK.width * DEFAULT_PLANK.length;
   const purePlanksCount = Math.ceil(floorArea / plankArea);
-  const totalPlanks = Math.ceil(purePlanksCount * WASTE_COEFFICIENT);
+  const currentCoefficient = WASTE_COEFFICIENTS[layout];
+  const totalPlanks = Math.ceil(purePlanksCount * currentCoefficient);
 
-  const paintLiters = wallArea * PAINT_CONSUMPTION_PER_SQM;
+  const paintLiters = wallArea * PAINT_CONSUMPTION_TWO_LAYERS_PER_SQM;
 
   return {
     floorArea: Number(floorArea.toFixed(2)),

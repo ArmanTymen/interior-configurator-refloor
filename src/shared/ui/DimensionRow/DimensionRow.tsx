@@ -1,5 +1,5 @@
-import { useState, type ChangeEvent } from 'react';
-
+import { useEffect, useState, type ChangeEvent } from 'react';
+import styles from './DimensionRow.module.css';
 interface DimensionRowProps {
   readonly label: string;
   readonly name: string;
@@ -22,13 +22,12 @@ export const DimensionRow = ({
   const [draft, setDraft] = useState<string>(String(value));
   const [error, setError] = useState<string | null>(null);
 
-  const [prevValue, setPrevValue] = useState<number>(value);
-
-  if (value !== prevValue) {
-    setPrevValue(value);
+  /* eslint-disable react-hooks/set-state-in-effect */
+  useEffect(() => {
     setDraft(String(value));
     setError(null);
-  }
+  }, [value]);
+  /* eslint-enable react-hooks/set-state-in-effect */
 
   const validate = (val: number): string | null => {
     if (Number.isNaN(val)) return 'Некорректное число';
@@ -76,10 +75,10 @@ export const DimensionRow = ({
   };
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+    <div className={styles.container}>
+      <div className={styles.labelRow}>
         <label htmlFor={name}>{label} (м):</label>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+        <div className={styles.inputWrapper}>
           <input
             type="number"
             name={name}
@@ -89,10 +88,7 @@ export const DimensionRow = ({
             step={step}
             min={min}
             max={max}
-            style={{
-              width: '60px',
-              borderColor: error ? 'red' : undefined,
-            }}
+            className={styles.numberInput}
           />
         </div>
       </div>
@@ -104,12 +100,9 @@ export const DimensionRow = ({
         step={step}
         min={min}
         max={max}
+        className={styles.rangeInput}
       />
-      {error && (
-        <span style={{ color: 'red', fontSize: '12px', textAlign: 'right', marginTop: '-2px' }}>
-          {error}
-        </span>
-      )}
+      {error && <span className={styles.errorText}>{error}</span>}
     </div>
   );
 };

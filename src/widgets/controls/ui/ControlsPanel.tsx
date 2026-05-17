@@ -1,15 +1,18 @@
 import { useRoomStore } from '@/entities/room';
 import { calculateRoomMetrics } from '@/entities/room/lib/calculateMetrics';
 import { useMemo, useCallback } from 'react';
-import { DimensionRow } from '../../../shared/ui/DimensionRow/DimensionRow';
+import { DimensionRow } from '@/shared';
+import styles from './ControlsPanel.module.css';
 
 type DimensionKey = keyof ReturnType<typeof useRoomStore.getState>['dimensions'];
 
 export const ControlsPanel = () => {
   const dimensions = useRoomStore((state) => state.dimensions);
   const setDimensions = useRoomStore((state) => state.setDimensions);
+  const layout = useRoomStore((s) => s.layout);
+  const setLayout = useRoomStore((s) => s.setLayout);
 
-  const metrics = useMemo(() => calculateRoomMetrics(dimensions), [dimensions]);
+  const metrics = useMemo(() => calculateRoomMetrics(dimensions, layout), [dimensions, layout]);
 
   const handleDimensionChange = useCallback(
     (name: string, value: number) => {
@@ -19,25 +22,22 @@ export const ControlsPanel = () => {
   );
 
   return (
-    <aside
-      style={{
-        position: 'absolute',
-        top: 0,
-        right: 0,
-        width: '320px',
-        height: '100vh',
-        backgroundColor: '#f8f9fa',
-        padding: '20px',
-        boxShadow: '-2px 0 5px rgba(0,0,0,0.1)',
-        zIndex: 10,
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '20px',
-        overflowY: 'auto',
-      }}
-    >
-      <section style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+    <aside className={styles.panel}>
+      <section className={styles.section}>
         <h2>Параметры комнаты</h2>
+        <div className={styles.selectWrapper}>
+          <label>Тип раскладки:</label>
+
+          <select
+            value={layout}
+            onChange={(e) => setLayout(e.target.value as 'herringbone' | 'straight')}
+            className={styles.select}
+          >
+            <option value="herringbone">Ёлочка</option>
+
+            <option value="straight">Палубная</option>
+          </select>
+        </div>
 
         <DimensionRow
           label="Длина"
@@ -68,31 +68,31 @@ export const ControlsPanel = () => {
         />
       </section>
 
-      <hr style={{ width: '100%', borderColor: '#242323' }} />
+      <hr className={styles.divider} />
 
-      <section style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+      <section className={styles.estimates}>
         <h2>Смета материалов</h2>
-        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+        <div className={styles.estimateRow}>
           <span>Площадь пола:</span>
           <strong>{metrics.floorArea} м²</strong>
         </div>
-        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+        <div className={styles.estimateRow}>
           <span>Краска (в 2 слоя):</span>
           <strong>{metrics.paintLiters} л</strong>
         </div>
-        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+        <div className={styles.estimateRow}>
           <span>Площадь стен:</span>
           <strong>{metrics.wallArea} м²</strong>
         </div>
-        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+        <div className={styles.estimateRow}>
           <span>Длина плинтуса:</span>
           <strong>{metrics.skirtingLength} м</strong>
         </div>
-        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+        <div className={styles.estimateRow}>
           <span>Ламинат (без запаса):</span>
           <strong>{metrics.purePlanksCount} шт.</strong>
         </div>
-        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+        <div className={styles.estimateRow}>
           <span>Ламинат (с запасом):</span>
           <strong>{metrics.totalPlanks} шт.</strong>
         </div>
