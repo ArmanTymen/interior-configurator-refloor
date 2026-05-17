@@ -1,6 +1,6 @@
 import { PlankConfig, RoomConfig, TransformData } from '../model/types';
 
-const GAP = 0.002;
+const OVERLAP = 0.0003;
 const FLOOR_OFFSET = 0.0001;
 
 export const calculateHerringbone = (room: RoomConfig, plank: PlankConfig): TransformData[] => {
@@ -63,6 +63,6 @@ function addPlank(
     id,
     position: [cx, plank.thickness / 2 + FLOOR_OFFSET, cz],
     rotation: [0, angle, 0],
-    size: [plank.length - GAP, plank.thickness, plank.width - GAP],
+    size: [plank.length + OVERLAP, plank.thickness, plank.width + OVERLAP],
   });
 }

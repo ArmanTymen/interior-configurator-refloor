@@ -28,7 +28,6 @@ export const Floor = () => {
     const geo = new THREE.PlaneGeometry(DEFAULT_PLANK.width, DEFAULT_PLANK.length);
     geo.rotateX(-Math.PI / 2);
     geo.rotateY(Math.PI / 2);
-
     return geo;
   }, []);
 

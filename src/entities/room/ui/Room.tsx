@@ -3,6 +3,7 @@ import { useRoomStore } from '../model/store';
 import { Skirting } from './Skirting';
 
 const WALL_THICKNESS = 0.1;
+const FLOOR_THICKNESS = 0.2;
 
 export const Room = () => {
   const { width, length, height } = useRoomStore((state) => state.dimensions);
@@ -15,6 +16,7 @@ export const Room = () => {
   };
 
   const fullWidth = width + WALL_THICKNESS * 2;
+  const fullLength = length + WALL_THICKNESS * 2;
 
   return (
     <group>
@@ -48,6 +50,11 @@ export const Room = () => {
       >
         <boxGeometry args={[length, height, WALL_THICKNESS]} />
         <meshStandardMaterial {...wallMaterialProps} />
+      </mesh>
+
+      <mesh position={[0, -FLOOR_THICKNESS / 2, 0]} receiveShadow castShadow>
+        <boxGeometry args={[fullWidth, FLOOR_THICKNESS, fullLength]} />
+        <meshStandardMaterial color="#727272" roughness={0.9} />
       </mesh>
 
       <Skirting />

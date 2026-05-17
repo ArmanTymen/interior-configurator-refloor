@@ -11,9 +11,9 @@ export const calculateRoomMetrics = (dimensions: RoomDimensions): CalculationRes
   const skirtingLength = 2 * (length + width);
   const wallArea = skirtingLength * height;
 
-  const plankArea: number = DEFAULT_PLANK.width * DEFAULT_PLANK.length;
-  const purePlanksCount: number = floorArea / plankArea;
-  const totalPlanks: number = Math.ceil(purePlanksCount * WASTE_COEFFICIENT);
+  const plankArea = DEFAULT_PLANK.width * DEFAULT_PLANK.length;
+  const purePlanksCount = Math.ceil(floorArea / plankArea);
+  const totalPlanks = Math.ceil(purePlanksCount * WASTE_COEFFICIENT);
 
   const paintLiters = wallArea * PAINT_CONSUMPTION_PER_SQM;
 
@@ -23,5 +23,6 @@ export const calculateRoomMetrics = (dimensions: RoomDimensions): CalculationRes
     wallArea: Number(wallArea.toFixed(2)),
     totalPlanks,
     paintLiters: Number(paintLiters.toFixed(1)),
+    purePlanksCount,
   };
 };
