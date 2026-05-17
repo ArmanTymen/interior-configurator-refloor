@@ -5,14 +5,23 @@ import { useRoomStore } from '../model/store';
 import { calculateHerringbone } from '../lib/calculateHerringbone';
 import { DEFAULT_PLANK } from '../model/constants';
 import { FloorMaterial } from './FloorMaterial';
+import { calculateStraightLayout } from '../lib/calculateStraightLayout';
 
 export const Floor = () => {
   const { width, length } = useRoomStore((s) => s.dimensions);
+  const layout = useRoomStore((s) => s.layout);
 
-  const planks = useMemo(
-    () => calculateHerringbone({ width, depth: length }, DEFAULT_PLANK),
-    [width, length],
-  );
+  const planks = useMemo(() => {
+    const room = {
+      width,
+      depth: length,
+    };
+
+    if (layout === 'straight') {
+      return calculateStraightLayout(room, DEFAULT_PLANK);
+    }
+    return calculateHerringbone(room, DEFAULT_PLANK);
+  }, [width, length, layout]);
 
   const clippingPlanes = useMemo(
     () => [
@@ -39,7 +48,7 @@ export const Floor = () => {
       </mesh>
 
       <Instances
-        key={`${width}-${length}`}
+        key={`${width}-${length}-${layout}`}
         limit={planks.length}
         castShadow={false}
         receiveShadow={true}

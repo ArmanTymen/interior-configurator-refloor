@@ -1,9 +1,12 @@
 import { create } from 'zustand';
-import { RoomDimensions } from './types';
+import { FloorLayout, RoomDimensions } from './types';
 
 interface RoomState {
   dimensions: RoomDimensions;
+  layout: FloorLayout;
+
   setDimensions: (newDimensions: Partial<RoomDimensions>) => void;
+  setLayout: (layout: FloorLayout) => void;
 }
 
 export const useRoomStore = create<RoomState>((set) => ({
@@ -12,8 +15,16 @@ export const useRoomStore = create<RoomState>((set) => ({
     width: 4,
     height: 2.7,
   },
+
+  layout: 'herringbone',
+
   setDimensions: (newDimensions) =>
     set((state) => ({
-      dimensions: { ...state.dimensions, ...newDimensions },
+      dimensions: {
+        ...state.dimensions,
+        ...newDimensions,
+      },
     })),
+
+  setLayout: (layout) => set({ layout }),
 }));

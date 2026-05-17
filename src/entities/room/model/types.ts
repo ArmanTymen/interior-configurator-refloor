@@ -43,3 +43,5 @@ export interface WoodTextures {
   normalMap: THREE.Texture;
   roughnessMap: THREE.Texture;
 }
+
+export type FloorLayout = 'herringbone' | 'straight';
