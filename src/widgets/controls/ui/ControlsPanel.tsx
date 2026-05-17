@@ -1,7 +1,5 @@
 import { useRoomStore } from '@/entities/room';
-import { calculateHerringbone } from '@/entities/room/lib/calculateHerringbone';
 import { calculateRoomMetrics } from '@/entities/room/lib/calculateMetrics';
-import { DEFAULT_PLANK } from '@/entities/room/model/constants';
 import { type ChangeEvent, useMemo } from 'react';
 
 type DimensionKey = keyof ReturnType<typeof useRoomStore.getState>['dimensions'];
@@ -11,12 +9,7 @@ export const ControlsPanel = () => {
   const setDimensions = useRoomStore((state) => state.setDimensions);
 
   const metrics = useMemo(() => {
-    const generatedPlanks = calculateHerringbone(
-      { width: dimensions.width, depth: dimensions.length },
-      DEFAULT_PLANK,
-    );
-
-    return calculateRoomMetrics(dimensions, generatedPlanks.length);
+    return calculateRoomMetrics(dimensions);
   }, [dimensions]);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -46,71 +39,105 @@ export const ControlsPanel = () => {
         overflowY: 'auto',
       }}
     >
-      <section style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
+      <section style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
         <h2>Параметры комнаты</h2>
 
-        <label style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
-          Длина (м):
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+            <label htmlFor="length">Длина (м):</label>
+            <input
+              type="number"
+              name="length"
+              value={dimensions.length}
+              onChange={handleChange}
+              step="0.1"
+              min="1"
+              max="20"
+              style={{ width: '60px' }}
+            />
+          </div>
           <input
-            type="number"
+            type="range"
             name="length"
             value={dimensions.length}
             onChange={handleChange}
             step="0.1"
             min="1"
+            max="20"
           />
-        </label>
+        </div>
 
-        <label style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
-          Ширина (м):
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+            <label htmlFor="width">Ширина (м):</label>
+            <input
+              type="number"
+              name="width"
+              value={dimensions.width}
+              onChange={handleChange}
+              step="0.1"
+              min="1"
+              max="20"
+              style={{ width: '60px' }}
+            />
+          </div>
           <input
-            type="number"
+            type="range"
             name="width"
             value={dimensions.width}
             onChange={handleChange}
             step="0.1"
             min="1"
+            max="20"
           />
-        </label>
+        </div>
 
-        <label style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
-          Высота (м):
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+            <label htmlFor="height">Высота (м):</label>
+            <input
+              type="number"
+              name="height"
+              value={dimensions.height}
+              onChange={handleChange}
+              step="0.1"
+              min="2"
+              max="5"
+              style={{ width: '60px' }}
+            />
+          </div>
           <input
-            type="number"
+            type="range"
             name="height"
             value={dimensions.height}
             onChange={handleChange}
             step="0.1"
-            min="1"
+            min="2"
+            max="5"
           />
-        </label>
+        </div>
       </section>
 
       <hr style={{ width: '100%', borderColor: '#ddd' }} />
 
       <section style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
         <h2>Смета материалов</h2>
-
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
           <span>Площадь пола:</span>
           <strong>{metrics.floorArea} м²</strong>
         </div>
-
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
           <span>Краска (в 2 слоя):</span>
           <strong>{metrics.paintLiters} л</strong>
         </div>
-
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
           <span>Площадь стен:</span>
           <strong>{metrics.wallArea} м²</strong>
         </div>
-
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
           <span>Длина плинтуса:</span>
           <strong>{metrics.skirtingLength} м</strong>
         </div>
-
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
           <span>Ламинат (с запасом):</span>
           <strong>{metrics.totalPlanks} шт.</strong>
