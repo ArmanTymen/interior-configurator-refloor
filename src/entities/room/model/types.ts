@@ -1,3 +1,5 @@
+import * as THREE from 'three';
+
 export interface PlankConfig {
   readonly width: number;
   readonly length: number;
@@ -33,4 +35,11 @@ export interface CalculationResult {
   readonly wallArea: number;
   readonly totalPlanks: number;
   readonly paintLiters: number;
+  readonly purePlanksCount: number;
+}
+
+export interface WoodTextures {
+  map: THREE.Texture;
+  normalMap: THREE.Texture;
+  roughnessMap: THREE.Texture;
 }

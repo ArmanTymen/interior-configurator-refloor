@@ -1,8 +1,9 @@
 import { OrbitControls, Grid, Environment, ContactShadows } from '@react-three/drei';
 import { Canvas } from '@react-three/fiber';
 import { Floor, Room } from '@/entities/room';
-import { ControlsPanel, Lighting } from '@/widgets/controls';
 import { Perf } from 'r3f-perf';
+import { Lighting } from './shared';
+import { ControlsPanel } from './widgets/controls';
 
 function App() {
   return (
@@ -36,7 +37,7 @@ function App() {
             resolution={1024}
             frames={1}
           />
-          <color attach="background" args={['#dfe6ea']} />
+          <color attach="background" args={['#0c0c0c']} />
           <Grid infiniteGrid fadeDistance={50} cellColor="#444" sectionColor="#666" />
           <OrbitControls
             makeDefault

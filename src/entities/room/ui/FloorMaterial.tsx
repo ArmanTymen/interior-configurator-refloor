@@ -2,12 +2,7 @@ import { useTexture } from '@react-three/drei';
 import { useThree } from '@react-three/fiber';
 import { useEffect, useMemo } from 'react';
 import * as THREE from 'three';
-
-interface WoodTextures {
-  map: THREE.Texture;
-  normalMap: THREE.Texture;
-  roughnessMap: THREE.Texture;
-}
+import { WoodTextures } from '../model/types';
 
 interface FloorMaterialProps {
   readonly clippingPlanes: THREE.Plane[];
@@ -34,8 +29,10 @@ export const FloorMaterial = ({ clippingPlanes }: FloorMaterialProps) => {
       texture.wrapS = THREE.RepeatWrapping;
       texture.wrapT = THREE.RepeatWrapping;
       texture.anisotropy = maxAnisotropy;
-      texture.repeat.set(1, 1);
+      texture.repeat.set(0.35, 0.35);
       texture.needsUpdate = true;
+      texture.minFilter = THREE.LinearMipmapLinearFilter;
+      texture.magFilter = THREE.LinearFilter;
     });
 
     cloned.map.colorSpace = THREE.SRGBColorSpace;
@@ -55,17 +52,16 @@ export const FloorMaterial = ({ clippingPlanes }: FloorMaterialProps) => {
       map={clonedTextures.map}
       normalMap={clonedTextures.normalMap}
       roughnessMap={clonedTextures.roughnessMap}
-      roughness={0.6}
+      roughness={0.85}
       metalness={0.0}
       clippingPlanes={clippingPlanes}
-      normalScale={new THREE.Vector2(0.8, 0.8)}
+      normalScale={new THREE.Vector2(0.35, 0.35)}
       onBeforeCompile={(shader: THREE.WebGLProgramParametersWithUniforms) => {
         shader.vertexShader = shader.vertexShader.replace(
           '#include <uv_vertex>',
           `
         #include <uv_vertex>
         #ifdef USE_UV
-          vUv += instanceMatrix[3].xz * 2.0;
         #endif
         `,
         );

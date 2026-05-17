@@ -1,6 +1,7 @@
 import { useRoomStore } from '@/entities/room';
 import { calculateRoomMetrics } from '@/entities/room/lib/calculateMetrics';
-import { type ChangeEvent, useMemo } from 'react';
+import { useMemo, useCallback } from 'react';
+import { DimensionRow } from '../../../shared/ui/DimensionRow/DimensionRow';
 
 type DimensionKey = keyof ReturnType<typeof useRoomStore.getState>['dimensions'];
 
@@ -8,18 +9,14 @@ export const ControlsPanel = () => {
   const dimensions = useRoomStore((state) => state.dimensions);
   const setDimensions = useRoomStore((state) => state.setDimensions);
 
-  const metrics = useMemo(() => {
-    return calculateRoomMetrics(dimensions);
-  }, [dimensions]);
+  const metrics = useMemo(() => calculateRoomMetrics(dimensions), [dimensions]);
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    const numValue = parseFloat(value) || 0;
-
-    setDimensions({
-      [name as DimensionKey]: numValue,
-    });
-  };
+  const handleDimensionChange = useCallback(
+    (name: string, value: number) => {
+      setDimensions({ [name as DimensionKey]: value });
+    },
+    [setDimensions],
+  );
 
   return (
     <aside
@@ -42,83 +39,36 @@ export const ControlsPanel = () => {
       <section style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
         <h2>Параметры комнаты</h2>
 
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-            <label htmlFor="length">Длина (м):</label>
-            <input
-              type="number"
-              name="length"
-              value={dimensions.length}
-              onChange={handleChange}
-              step="0.1"
-              min="1"
-              max="20"
-              style={{ width: '60px' }}
-            />
-          </div>
-          <input
-            type="range"
-            name="length"
-            value={dimensions.length}
-            onChange={handleChange}
-            step="0.1"
-            min="1"
-            max="20"
-          />
-        </div>
-
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-            <label htmlFor="width">Ширина (м):</label>
-            <input
-              type="number"
-              name="width"
-              value={dimensions.width}
-              onChange={handleChange}
-              step="0.1"
-              min="1"
-              max="20"
-              style={{ width: '60px' }}
-            />
-          </div>
-          <input
-            type="range"
-            name="width"
-            value={dimensions.width}
-            onChange={handleChange}
-            step="0.1"
-            min="1"
-            max="20"
-          />
-        </div>
-
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-            <label htmlFor="height">Высота (м):</label>
-            <input
-              type="number"
-              name="height"
-              value={dimensions.height}
-              onChange={handleChange}
-              step="0.1"
-              min="2"
-              max="5"
-              style={{ width: '60px' }}
-            />
-          </div>
-          <input
-            type="range"
-            name="height"
-            value={dimensions.height}
-            onChange={handleChange}
-            step="0.1"
-            min="2"
-            max="5"
-          />
-        </div>
+        <DimensionRow
+          label="Длина"
+          name="length"
+          value={dimensions.length}
+          min={1}
+          max={20}
+          step={0.1}
+          onChange={handleDimensionChange}
+        />
+        <DimensionRow
+          label="Ширина"
+          name="width"
+          value={dimensions.width}
+          min={1}
+          max={20}
+          step={0.1}
+          onChange={handleDimensionChange}
+        />
+        <DimensionRow
+          label="Высота"
+          name="height"
+          value={dimensions.height}
+          min={2}
+          max={5}
+          step={0.1}
+          onChange={handleDimensionChange}
+        />
       </section>
 
-      <hr style={{ width: '100%', borderColor: '#ddd' }} />
+      <hr style={{ width: '100%', borderColor: '#242323' }} />
 
       <section style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
         <h2>Смета материалов</h2>
@@ -137,6 +87,10 @@ export const ControlsPanel = () => {
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
           <span>Длина плинтуса:</span>
           <strong>{metrics.skirtingLength} м</strong>
+        </div>
+        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+          <span>Ламинат (без запаса):</span>
+          <strong>{metrics.purePlanksCount} шт.</strong>
         </div>
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
           <span>Ламинат (с запасом):</span>
