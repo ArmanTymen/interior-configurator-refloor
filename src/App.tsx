@@ -10,26 +10,41 @@ function App() {
       <div style={{ flex: 1, background: '#111' }}>
         <Canvas
           camera={{ position: [10, 10, 10], fov: 45 }}
-          gl={{ localClippingEnabled: true }}
+          gl={{
+            localClippingEnabled: true,
+            toneMappingExposure: 1.2,
+          }}
           shadows
+          dpr={[1, 2]}
         >
-          <Environment preset="apartment" />
+          <Environment preset="warehouse" />
           <Perf position="top-left" />
-          <Room />
-          <Floor />
+
+          <group position={[0, 0.2, 0]}>
+            <Room />
+            <Floor />
+          </group>
+
           <Lighting />
+
           <ContactShadows
-            position={[0, -0.01, 0]}
-            opacity={0.4}
-            blur={2}
-            scale={20}
-            far={0.1}
+            position={[0, 0.19, 0]}
+            opacity={0.25}
+            blur={3}
+            scale={25}
+            far={0.4}
             resolution={1024}
-            color="#000000"
+            frames={1}
           />
-          <color attach="background" args={['#202020']} />
+          <color attach="background" args={['#dfe6ea']} />
           <Grid infiniteGrid fadeDistance={50} cellColor="#444" sectionColor="#666" />
-          <OrbitControls makeDefault />
+          <OrbitControls
+            makeDefault
+            minPolarAngle={0}
+            maxPolarAngle={Math.PI / 2.1}
+            minDistance={4}
+            maxDistance={20}
+          />
         </Canvas>
       </div>
       <ControlsPanel />

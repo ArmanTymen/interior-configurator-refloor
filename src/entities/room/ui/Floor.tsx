@@ -4,6 +4,7 @@ import { Instance, Instances } from '@react-three/drei';
 import { useRoomStore } from '../model/store';
 import { calculateHerringbone } from '../lib/calculateHerringbone';
 import { DEFAULT_PLANK } from '../model/constants';
+import { FloorMaterial } from './FloorMaterial';
 
 export const Floor = () => {
   const { width, length } = useRoomStore((s) => s.dimensions);
@@ -23,18 +24,47 @@ export const Floor = () => {
     [width, length],
   );
 
+  const horizontalPlaneGeometry = useMemo<THREE.PlaneGeometry>(() => {
+    const geo = new THREE.PlaneGeometry(DEFAULT_PLANK.width, DEFAULT_PLANK.length);
+    geo.rotateX(-Math.PI / 2);
+    geo.rotateY(Math.PI / 2);
+
+    return geo;
+  }, []);
+
   return (
-    <Instances key={`${width}-${length}`} limit={planks.length} castShadow receiveShadow={false}>
-      <boxGeometry args={[1, 1, 1]} />
-      <meshStandardMaterial
-        color="#8b4513"
-        roughness={0.3}
-        metalness={0.05}
-        clippingPlanes={clippingPlanes}
-      />
-      {planks.map((p) => (
-        <Instance key={p.id} position={p.position} rotation={p.rotation} scale={p.size} />
-      ))}
-    </Instances>
+    <group>
+      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0, 0]} renderOrder={-1}>
+        <planeGeometry args={[width, length]} />
+        <meshBasicMaterial color="#0a0705" toneMapped={false} depthWrite={false} />
+      </mesh>
+
+      <Instances
+        key={`${width}-${length}`}
+        limit={planks.length}
+        castShadow={false}
+        receiveShadow={true}
+        position={[0, 0.001, 0]}
+        geometry={horizontalPlaneGeometry}
+      >
+        <FloorMaterial clippingPlanes={clippingPlanes} />
+
+        {planks.map((p) => {
+          const scaleX = Math.max(0, p.size[0] / DEFAULT_PLANK.length);
+          const scaleZ = Math.max(0, p.size[2] / DEFAULT_PLANK.width);
+
+          const extendedScale: [number, number, number] = [scaleX, 1, scaleZ];
+
+          return (
+            <Instance
+              key={p.id}
+              position={[p.position[0], 0, p.position[2]]}
+              rotation={p.rotation}
+              scale={extendedScale}
+            />
+          );
+        })}
+      </Instances>
+    </group>
   );
 };

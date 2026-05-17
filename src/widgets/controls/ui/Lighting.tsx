@@ -5,10 +5,10 @@ export const Lighting = () => {
   const config: LightConfig = useMemo(
     () => ({
       ambientColor: '#ffffff',
-      ambientIntensity: 0.6,
-      directionalColor: '#ffffff',
-      directionalIntensity: 1.5,
-      directionalPosition: [5, 10, 5],
+      ambientIntensity: 0.7,
+      directionalColor: '#fff8f0',
+      directionalIntensity: 0.8,
+      directionalPosition: [8, 12, 6],
       castShadow: true,
     }),
     [],
@@ -19,16 +19,17 @@ export const Lighting = () => {
       <ambientLight color={config.ambientColor} intensity={config.ambientIntensity} />
 
       <directionalLight
-        {...config}
+        color={config.directionalColor}
+        intensity={config.directionalIntensity}
         position={config.directionalPosition}
         castShadow
         shadow-mapSize={[2048, 2048]}
-        shadow-bias={-0.0001}
-        shadow-camera-far={50}
-        shadow-camera-left={-10}
-        shadow-camera-right={10}
-        shadow-camera-top={10}
-        shadow-camera-bottom={-10}
+        shadow-bias={-0.0002}
+        shadow-camera-far={40}
+        shadow-camera-left={-12}
+        shadow-camera-right={12}
+        shadow-camera-top={12}
+        shadow-camera-bottom={-12}
       />
     </group>
   );

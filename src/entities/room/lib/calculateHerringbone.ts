@@ -1,6 +1,6 @@
 import { PlankConfig, RoomConfig, TransformData } from '../model/types';
 
-const GAP = 0.008;
+const GAP = 0.002;
 const FLOOR_OFFSET = 0.0001;
 
 export const calculateHerringbone = (room: RoomConfig, plank: PlankConfig): TransformData[] => {
