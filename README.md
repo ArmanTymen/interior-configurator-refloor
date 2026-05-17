@@ -1,6 +1,14 @@
 # Refloor
 
-Интерактивный 3D-конфигуратор напольных покрытий на React Three Fiber.
+<details>
+  <summary>📸 Посмотреть скриншоты интерфейса и метрик производительности</summary>
+  
+  ### Палубная раскладка (Straight layout)
+  ![Палубная раскладка ламината и панель управления](.github/assets/preview-straight.jpg)
+  
+  ### Раскладка "Ёлочка" (Herringbone layout)
+  ![Раскладка ёлочкой и метрики производительности](.github/assets/preview-herringbone.jpg)
+</details>
 
 ## Возможности
 
