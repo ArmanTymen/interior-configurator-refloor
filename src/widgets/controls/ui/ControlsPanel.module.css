@@ -1,0 +1,47 @@
+.panel {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 320px;
+  height: 100vh;
+  background-color: #f8f9fa;
+  padding: 20px;
+  box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  overflow-y: auto;
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.selectWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.select {
+  padding: 6px;
+}
+
+.divider {
+  width: 100%;
+  border-color: #242323;
+}
+
+.estimates {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.estimateRow {
+  display: flex;
+  justify-content: space-between;
+}
